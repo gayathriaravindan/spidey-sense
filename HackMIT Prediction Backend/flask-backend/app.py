@@ -1,6 +1,7 @@
 from flask import Flask, request
 from flask_cors import CORS
 import joblib
+import requests
 
 app = Flask(__name__)
 CORS(app)
@@ -30,30 +31,22 @@ def predict():
 
     # Confirm data is strings
     if not isinstance(data["heart_rate"], (str, float, int)):
-        print("1")
         return {"error": "Invalid heart_rate parameter: data type"}, 400
     if not isinstance(data["x_acceleration"], (str, float, int)):
-        print("2")
         return {"error": "Invalid heart_rate parameter: data type"}, 400
     if not isinstance(data["y_acceleration"], (str, float, int)):
-        print("3")
         return {"error": "Invalid heart_rate parameter: data type"}, 400
     if not isinstance(data["z_acceleration"], (str, float, int)):
-        print("4")
         return {"error": "Invalid heart_rate parameter: data type"}, 400
     
     # Confirm data can be cast
     if not is_float(data["heart_rate"]):
-        print(1)
         return {"error": "Invalid heart_rate parameter"}, 400
     if not is_float(data["x_acceleration"]):
-        print(2)
         return {"error": "Invalid x_acceleration parameter"}, 400
     if not is_float(data["y_acceleration"]):
-        print(3)
         return {"error": "Invalid y_acceleration parameter"}, 400
     if not is_float(data["z_acceleration"]):
-        print(4)
         return {"error": "Invalid z_acceleration parameter"}, 400
     if not isinstance(data, str) or not data["temperature"].isnumeric():
         temperature = 5
@@ -87,12 +80,17 @@ def predict():
     y_acceleration *= 64
     z_acceleration *= 64
 
-    print(x_acceleration)
-
     prediction = model.predict_proba([[heart_rate, x_acceleration, y_acceleration, z_acceleration]])[0][1]
-    print(prediction.item())
 
-    return {"prediction": "normal" if prediction.item() < proba_cutoff else "anomaly"}
+    predBool = "normal" if prediction.item() < proba_cutoff else "anomaly"
+
+    if predBool == "anomaly":
+        url = "https://4d44-192-54-222-158.ngrok-free.app/start_call"
+        response = requests.get(url)
+        if (not response.status_code == 200):
+            print('err')
+
+    return {"prediction": predBool}
     
 
 if __name__ == '__main__':
