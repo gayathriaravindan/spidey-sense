@@ -20,6 +20,8 @@
 		A21804C22C963DAF005A6ED4 /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21804C12C963DAF005A6ED4 /* SignInView.swift */; };
 		A21804C42C963DD7005A6ED4 /* SignUpOrSignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21804C32C963DD7005A6ED4 /* SignUpOrSignInView.swift */; };
 		A2C0BE702C96545A0090DACA /* SplashScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2C0BE6F2C96545A0090DACA /* SplashScreenView.swift */; };
+		EADD42772C969D5B005B9E22 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = EADD42762C969D57005B9E22 /* Profile.swift */; };
+		EADD42792C96AB59005B9E22 /* Activity.swift in Sources */ = {isa = PBXBuildFile; fileRef = EADD42782C96AB51005B9E22 /* Activity.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +57,8 @@
 		A21804C12C963DAF005A6ED4 /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 		A21804C32C963DD7005A6ED4 /* SignUpOrSignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpOrSignInView.swift; sourceTree = "<group>"; };
 		A2C0BE6F2C96545A0090DACA /* SplashScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreenView.swift; sourceTree = "<group>"; };
+		EADD42762C969D57005B9E22 /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
+		EADD42782C96AB51005B9E22 /* Activity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Activity.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +110,8 @@
 		A21804892C963164005A6ED4 /* spidey-sense */ = {
 			isa = PBXGroup;
 			children = (
+				EADD42782C96AB51005B9E22 /* Activity.swift */,
+				EADD42762C969D57005B9E22 /* Profile.swift */,
 				A218048A2C963164005A6ED4 /* spidey_senseApp.swift */,
 				A218048C2C963164005A6ED4 /* ContentView.swift */,
 				A218048E2C963164005A6ED4 /* Item.swift */,
@@ -211,7 +217,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1540;
-				LastUpgradeCheck = 1540;
+				LastUpgradeCheck = 1600;
 				TargetAttributes = {
 					A21804862C963164005A6ED4 = {
 						CreatedOnToolsVersion = 15.4;
@@ -281,10 +287,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				A2C0BE702C96545A0090DACA /* SplashScreenView.swift in Sources */,
+				EADD42772C969D5B005B9E22 /* Profile.swift in Sources */,
 				A21804C02C963C97005A6ED4 /* SignUpView.swift in Sources */,
 				A218048D2C963164005A6ED4 /* ContentView.swift in Sources */,
 				A218048F2C963164005A6ED4 /* Item.swift in Sources */,
 				A218048B2C963164005A6ED4 /* spidey_senseApp.swift in Sources */,
+				EADD42792C96AB59005B9E22 /* Activity.swift in Sources */,
 				A21804C22C963DAF005A6ED4 /* SignInView.swift in Sources */,
 				A21804C42C963DD7005A6ED4 /* SignUpOrSignInView.swift in Sources */,
 			);
@@ -503,7 +511,6 @@
 		A21804B12C963166005A6ED4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -522,7 +529,6 @@
 		A21804B22C963166005A6ED4 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -541,7 +547,6 @@
 		A21804B42C963166005A6ED4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -558,7 +563,6 @@
 		A21804B52C963166005A6ED4 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
