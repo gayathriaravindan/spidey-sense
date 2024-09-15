@@ -16,8 +16,10 @@ struct SignUpOrSignInView: View {
       } label: {
         if isSignUp {
           Text("Already have an account? Sign In")
+                .foregroundColor(Color.black)
         } else {
           Text("Don't have an account? Sign Up")
+                .foregroundColor(Color.black)
         }
       }
       .padding()

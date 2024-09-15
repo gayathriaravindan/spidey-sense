@@ -30,7 +30,7 @@ struct spidey_senseApp: App {
         WindowGroup {
             ZStack {
                 if clerk.loadingState == .notLoaded {
-                    ProgressView()
+                    SplashScreenView()
                 } else {
                     ContentView()
                 }
