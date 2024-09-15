@@ -1,4 +1,5 @@
 import SwiftUI
+import CoreBluetooth
 
 struct SignUpOrSignInView: View {
   @State private var isSignUp = true
@@ -25,4 +26,8 @@ struct SignUpOrSignInView: View {
       .padding()
     }
   }
+}
+
+#Preview {
+    SignUpOrSignInView()
 }
