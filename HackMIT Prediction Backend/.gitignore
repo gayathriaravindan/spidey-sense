@@ -1,0 +1,7 @@
+# Flask
+__pycache__/
+
+# npm
+node_modules/
+
+.env
