@@ -9,11 +9,11 @@ app = Flask(__name__)
 CORS(app)
 
 BASETEN_API_KEY = "YMKFudUr.FcjOTi13DlaR3ZtCbBIumoXeqFJy25yx" 
-BASETEN_MODEL_ID = "8w6yyp2q"
+MODEL_ID = "8w6yyp2q"
 TWILIO_PHONE_NUMBER = "+18557295038"
 
 account_sid = "AC9f06f684fe4f7db4930e1ac021123561"
-auth_token = "b40ce8a6260d575947ce58e4693316f1"
+auth_token = "89b25e97bfb8c45c40ee630abd2f8964"
 client = Client(account_sid, auth_token)
 
 # Set up logging for debugging
@@ -25,191 +25,69 @@ def main():
 
 @app.route('/start_call', methods=['GET', 'POST'])
 def start_call():
-    # Create a TwiML response
-    logging.info("start_call function called")
     try:
-        # Create a TwiML response
-        response = VoiceResponse()
-        
-        # Add the initial message
-        response.say("Hi, I'm Twilio calling to inform you about Rishita, who is currently in danger at Georgia Tech Avenue.")
-        
-        # Add a gather for speech input, redirect to your ngrok URL in the action
-        response.gather(input='speech', action='https://cd91-192-54-222-158.ngrok-free.app/handle_response', method='POST')
-        
-        # Initiate the call with the TwiML
+        # Replace with your TwiML Bin URL
+        twiml_bin_url = 'https://handler.twilio.com/twiml/EH332f6a8867e846cbfa4422c507e6c1fc'
+
+        # Initiate the call with the TwiML Bin URL
         call = client.calls.create(
-            twiml=str(response),
-            to="+15109800215",  # Your verified Twilio number
+            url=twiml_bin_url,  # Use the TwiML Bin URL here
+            to="+15109800215",   # The phone number to call
             from_=TWILIO_PHONE_NUMBER
         )
         
         logging.info(f"Call initiated with SID: {call.sid}")
         return jsonify({"message": "Call started", "call_sid": call.sid})
+    
     except Exception as e:
         logging.error(f"Error in start_call: {str(e)}")
         return jsonify({"error": str(e)}), 500
-
+    
 
 
 @app.route('/handle_response', methods=['POST'])
 def handle_response():
-    # Log all incoming data for debugging
-    logging.info("handle_response function called")
-    logging.debug(f"Received POST data: {request.form}")
-
     # Get the user's speech input
     user_input = request.form.get('SpeechResult', '')
 
-    # Create a new TwiML response
-    response = VoiceResponse()
+    # Log the input
+    logging.debug(f"Received speech input: {user_input}")
 
-    if not user_input:
-        logging.warning("No speech input received")
-        response.say("I'm sorry, I didn't catch that. Could you please repeat?")
-        response.gather(input='speech', action='https://cd91-192-54-222-158.ngrok-free.app/handle_response', method='POST')
-        return str(response)
-
-    logging.info(f"Transcribed speech: {user_input}")
-    response.say("Got it, thanks")
-
-    
-
-    '''
-    # Generate LLM response based on the user's input
+    # Generate LLM response
     llm_response = generate_llm_response(user_input)
     logging.info(f"LLM response: {llm_response}")
 
-    # Respond with the LLM response
+    # Create a new TwiML response
+    response = VoiceResponse()
     response.say(llm_response)
-
-    # Add another gather for continued conversation
-    response.gather(input='speech', action='https://c300-192-54-222-158.ngrok-free.app/handle_response', method='POST')
+    response.gather(input='speech', action='/handle_response', method='POST')
 
     return str(response)
 
-    '''
+
+
 
 def generate_llm_response(user_input):
-    url = f"https://model-{BASETEN_MODEL_ID}.api.baseten.co/production/predict"
-    headers = {"Authorization": f"Api-Key {BASETEN_API_KEY}"}
+    messages = [
+        {"role": "system", "content": "You are spiderman who is getting a call to save someone. Ask questions or generate a reply like \"On my way in 15\""},
+        {"role": "user", "content": user_input},
+    ]
+
     payload = {
-        "prompt": f"In a phone conversation with spiderman, respond to: {user_input}"
+    "messages": messages,
+    "stream": True,
+    "max_tokens": 2048,
+    "temperature": 0.9
     }
-    try:
-        response = requests.post(url, headers=headers, json=payload)
-        if response.status_code == 200:
-            return response.json()['output']
-        else:
-            return "I'm sorry, I'm having trouble understanding. Can you please repeat that?"
-    except Exception as e:
-        return f"An error occurred: {str(e)}"
+    res = requests.post(
+        f"https://model-{MODEL_ID}.api.baseten.co/production/predict",
+        headers={"Authorization": f"Api-Key {BASETEN_API_KEY}"},
+        json=payload,
+        stream=True
+    )
+    return (res.text)
+    
 
 if __name__ == '__main__':
     # Make sure the app runs locally on port 5000
     app.run(host='127.0.0.1', port=5000)
-
-
-'''
-from flask import Flask, request, jsonify
-from twilio.rest import Client
-from twilio.twiml.voice_response import VoiceResponse
-import logging
-import requests
-
-app = Flask(__name__)
-
-BASETEN_API_KEY = "YMKFudUr.FcjOTi13DlaR3ZtCbBIumoXeqFJy25yx" 
-BASETEN_MODEL_ID = "8w6yyp2q"
-TWILIO_PHONE_NUMBER = "+18557295038"
-
-account_sid = "AC9f06f684fe4f7db4930e1ac021123561"
-auth_token = "b40ce8a6260d575947ce58e4693316f1"
-client = Client(account_sid, auth_token)
-
-@app.route('/')
-def main():
-    return "hello, world"
-
-@app.route('/start_call', methods=['GET', 'POST'])
-def start_call():
-    # Create a TwiML response
-    response = VoiceResponse()
-    
-    # Add the initial message
-    response.say("Hi, I'm Twilio calling to inform you about Rishita, who is currently in danger at Georgia Tech Avenue.")
-    
-    # Add a gather for speech input
-    response.gather(input='speech', action='/handle_response', method='POST')
-
-    # Initiate the call with the TwiML
-    call = client.calls.create(
-        twiml=str(response),
-        to="+15109800215",
-        from_=TWILIO_PHONE_NUMBER
-    )
-
-    return jsonify({"message": "Call started", "call_sid": call.sid})
-
-logging.basicConfig(level=logging.DEBUG)
-
-@app.route('/handle_response', methods=['GET','POST'])
-def handle_response():
-    # Log all incoming data
-    logging.debug(f"Received POST data: {request.form}")
-
-    # Get the user's speech input
-    user_input = request.form.get('SpeechResult', '')
-    
-    if not user_input:
-        logging.warning("No speech input received")
-        response = VoiceResponse()
-        response.say("I'm sorry, I didn't catch that. Could you please repeat?")
-        response.gather(input='speech', action='/handle_response', method='POST')
-        return str(response)
-
-    logging.info(f"Transcribed speech: {user_input}")
-
-    # Generate LLM response
-    llm_response = generate_llm_response(user_input)
-    logging.info(f"LLM response: {llm_response}")
-
-    # Create a new TwiML response
-    response = VoiceResponse()
-    response.say(llm_response)
-
-    # Add another gather for continued conversation
-    response.gather(input='speech', action='/handle_response', method='POST')
-
-    return str(response)
-    
-    # Generate LLM response
-    llm_response = generate_llm_response(user_input)
-
-    # Create a new TwiML response
-    response = VoiceResponse()
-    response.say(llm_response)
-
-    # Add another gather for continued conversation
-    response.gather(input='speech', action='/handle_response', method='POST')
-
-    return str(response)
-   
-
-def generate_llm_response(user_input):
-    url = f"https://model-{BASETEN_MODEL_ID}.api.baseten.co/production/predict"
-    headers = {"Authorization": f"Api-Key {BASETEN_API_KEY}"}
-    payload = {
-        "prompt": f"In a phone conversation with spiderman, respond to: {user_input}"
-    }
-    try:
-        response = requests.post(url, headers=headers, json=payload)
-        if response.status_code == 200:
-            return response.json()['output']
-        else:
-            return "I'm sorry, I'm having trouble understanding. Can you please repeat that?"
-    except Exception as e:
-        return f"An error occurred: {str(e)}"
-
-if __name__ == '__main__':
-    app.run(host='127.0.0.1') '''
